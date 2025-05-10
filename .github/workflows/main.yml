@@ -16,42 +16,43 @@ jobs:
         run: npm install
       - name: Run Tests
         run: npx cypress run --spec $(node cypress-parallel.js ${{ matrix.containers }} 2)
-  
-      - name: Upload Mochawesome results
-        uses: actions/upload-artifact@v4
-        with:
-          name: mochawesome-${{ matrix.containers }}
-          path: cypress/reports
+        continue-on-error: true
+      # - name: Upload Mochawesome results
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: mochawesome-${{ matrix.containers }}
+      #     path: cypress/reports
 
   merge-and-publish:
+    name: reports
+    if: always()
     runs-on: ubuntu-latest
     needs: job1
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: cypress/reports
+      # - name: Download all artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     path: cypress/reports
 
-      - name: List downloaded reports (debug)
-        run: ls -R cypress/reports
+      # - name: List downloaded reports (debug)
+      #   run: ls -R cypress/reports
 
-      - name: Install mochawesome tools
-        run: npm install -g mochawesome-merge mochawesome-report-generator
+      # - name: Install mochawesome tools
+      #   run: npm install -g mochawesome-merge mochawesome-report-generator
 
-      - name: Merge mochawesome JSON files
-        run: |
-          mkdir -p merged-report
-          npx mochawesome-merge cypress/reports/*.json > merged-report/merged.json
+      # - name: Merge mochawesome JSON files
+      #   run: |
+      #     mkdir -p merged-report
+      #     npx mochawesome-merge cypress/reports/*.json > merged-report/merged.json
 
-      - name: Generate final HTML report
-        run: |
-          npx marge merged-report/merged.json --reportDir final-report --reportFilename index.html
+      # - name: Generate final HTML report
+      #   run: |
+      #     npx marge merged-report/merged.json --reportDir final-report --reportFilename index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./final-report
+          publish_dir: cypress/reports/html
