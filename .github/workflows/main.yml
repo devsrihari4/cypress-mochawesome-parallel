@@ -40,11 +40,9 @@ jobs:
         run: npm ci
 
       - name: Download all artifacts
-        run: |
-          mkdir -p artifacts
-          for i in 0 1; do
-            npx @actions/artifact-cli download --name mochawesome-$i --path artifacts || true
-          done
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
       - name: Merge mochawesome reports
         run: |
