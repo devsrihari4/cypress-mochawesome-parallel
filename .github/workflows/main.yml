@@ -61,11 +61,11 @@ jobs:
               echo "Final merged contents:"
               ls -lh merged-results
 
-          # npx mochawesome-merge merged-reports/*.json > merged-reports/merged.json
-          # npx marge merged-reports/merged.json -f index -o mochawesome-report
+              npx mochawesome-merge merged-results/*.json > merged-results/merged.json
+              npx marge merged-results/merged.json -f index -o mochawesome-report
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./merged-results
+          publish_dir: ./mochawesome-report
