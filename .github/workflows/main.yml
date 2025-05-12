@@ -6,9 +6,9 @@ jobs:
     name: cypress-run
     runs-on: ubuntu-latest
     strategy:
-            fail-fast: false
-            matrix:
-             containers: [ 0,1 ]
+      fail-fast: false
+      matrix:
+        containers: [0, 1]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,21 +50,6 @@ jobs:
           find artifacts -name '*.json' -exec cp {} merged-reports/ \;
           npx mochawesome-merge merged-reports/*.json > merged-reports/merged.json
           npx marge merged-reports/merged.json -f index -o mochawesome-report
-        
-      # - name: List downloaded reports (debug)
-      #   run: ls -R cypress/reports
-
-      # - name: Install mochawesome tools
-      #   run: npm install -g mochawesome-merge mochawesome-report-generator
-
-      # - name: Merge mochawesome JSON files
-      #   run: |
-      #     mkdir -p merged-report
-      #     npx mochawesome-merge cypress/reports/*.json > merged-report/merged.json
-
-      # - name: Generate final HTML report
-      #   run: |
-      #     npx marge merged-report/merged.json --reportDir final-report --reportFilename index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
