@@ -42,15 +42,15 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: downloaded-reports
+          path: artifacts
 
-      - name: Merge and Generate Final Report
+      - name: Merge mochawesome reports
         run: |
-          mkdir -p cypress/reports
-          find downloaded-reports -name '*.json' -exec cp {} cypress/reports/ \;
-          npx mochawesome-merge cypress/reports/*.json > cypress/reports/merged.json
-          npx marge cypress/reports/merged.json -f index -o mochawesome-report
-
+          mkdir -p merged-reports
+          find artifacts -name '*.json' -exec cp {} merged-reports/ \;
+          npx mochawesome-merge merged-reports/*.json > merged-reports/merged.json
+          npx marge merged-reports/merged.json -f index -o mochawesome-report
+        
       # - name: List downloaded reports (debug)
       #   run: ls -R cypress/reports
 
