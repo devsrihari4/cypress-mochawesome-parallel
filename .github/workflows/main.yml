@@ -63,10 +63,13 @@ jobs:
         run: |
           mkdir merged-json
           find cypress/reports -name '*.json' -exec cp {} merged-json/ \;
+          ls -lh merged-json
           npx mochawesome-merge merged-json/*.json > merged-json/merged.json
+          ls -lh merged-json
           npx marge merged-json/merged.json -f index -o mochawesome-report
           # npx marge merged-json/merged.json --reportDir ./mochawesome-report --inline
-
+          ls -lh merged-json
+          
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
