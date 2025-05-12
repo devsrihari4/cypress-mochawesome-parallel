@@ -42,17 +42,30 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: cypress/reports/
 
       - name: Merge mochawesome reports
         run: |
           mkdir -p merged-reports
           find artifacts -name '*.json' -exec cp {} merged-reports/ \;
-          npx mochawesome-merge merged-reports/*.json > merged-reports/merged.json
-          npx marge merged-reports/merged.json -f index -o mochawesome-report
+
+      - name: Merge Allure Results from all machines
+        run: |
+              mkdir -p merged-results
+              for folder in cypress/reports/mochawesome-*; do
+                if [ -d "$folder" ]; then
+                  echo "Merging from $folder"
+                  rsync -a "$folder"/ merged-results/
+                fi
+              done
+              echo "Final merged contents:"
+              ls -lh merged-results
+
+          # npx mochawesome-merge merged-reports/*.json > merged-reports/merged.json
+          # npx marge merged-reports/merged.json -f index -o mochawesome-report
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./mochawesome-report
+          publish_dir: ./merged-results
