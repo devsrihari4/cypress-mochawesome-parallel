@@ -17,11 +17,11 @@ jobs:
       - name: Run Tests
         run: npx cypress run --spec $(node cypress-parallel.js ${{ matrix.containers }} 2)
         continue-on-error: true
-      # - name: Upload Mochawesome results
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: mochawesome-${{ matrix.containers }}
-      #     path: cypress/reports
+      - name: Upload Mochawesome results
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-${{ matrix.containers }}
+          path: cypress/reports/
 
   merge-and-publish:
     name: reports
@@ -31,10 +31,17 @@ jobs:
     steps:
       # - uses: actions/checkout@v4
 
-      # - name: Download all artifacts
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     path: cypress/reports
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded-reports
+
+      - name: Merge and Generate Final Report
+        run: |
+          mkdir -p cypress/reports
+          find downloaded-reports -name '*.json' -exec cp {} cypress/reports/ \;
+          npx mochawesome-merge cypress/reports/*.json > cypress/reports/merged.json
+          npx marge cypress/reports/merged.json -f index -o mochawesome-report
 
       # - name: List downloaded reports (debug)
       #   run: ls -R cypress/reports
@@ -55,4 +62,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: cypress/reports/html
+          publish_dir: ./mochawesome-report
