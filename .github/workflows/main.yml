@@ -44,10 +44,10 @@ jobs:
         with:
           path: cypress/reports/
 
-      - name: Merge mochawesome reports
-        run: |
-          mkdir -p merged-reports
-          find artifacts -name '*.json' -exec cp {} merged-reports/ \;
+      # - name: Merge mochawesome reports
+      #   run: |
+      #     mkdir -p merged-reports
+      #     find artifacts -name '*.json' -exec cp {} merged-reports/ \;
 
       - name: Merge Allure Results from all machines
         run: |
