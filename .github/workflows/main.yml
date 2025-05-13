@@ -43,6 +43,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: cypress/reports
+      - name: download
+          run: ls -R
 
       # - name: Merge Allure Results from all machines
       #   run: |
@@ -62,7 +64,8 @@ jobs:
       - name: Merge JSONs
         run: |
           mkdir merged-json
-          ls -lh cypress/reports
+          ls -lh cypress/reports/mochawesome-0
+          ls -lh cypress/reports/mochawesome-1
           find cypress/reports -name '*.json' -exec cp {} merged-json/ \;
           ls -lh merged-json
           npx mochawesome-merge merged-json/*.json > merged-json/merged.json
