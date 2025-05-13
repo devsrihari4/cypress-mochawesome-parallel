@@ -23,8 +23,8 @@ module.exports = defineConfig({
     saveAllAttempts: false,
     reportDir: "cypress/reports",
     overwrite: false,
-    html: false,
-    json: true
+    html: true,
+    // json: true
   },
 
   e2e: {
