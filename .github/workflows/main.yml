@@ -43,36 +43,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: cypress/reports
-      - name: download
-        run: ls -R
-
-      # - name: Merge Allure Results from all machines
-      #   run: |
-      #         mkdir -p merged-results
-      #         for folder in cypress/reports/mochawesome-*; do
-      #           if [ -d "$folder" ]; then
-      #             echo "Merging from $folder"
-      #             rsync -a "$folder"/ merged-results/
-      #           fi
-      #         done
-      #         echo "Final merged contents:"
-      #         ls -lh merged-results
-
-      #         npx mochawesome-merge merged-results/*.json > merged-results/merged.json
-      #         npx marge merged-results/merged.json --reportDir ./ --inline
-
-      # - name: Merge JSONs
-      #   run: |
-      #     mkdir merged-json
-      #     ls -lh cypress/reports/mochawesome-0
-      #     ls -lh cypress/reports/mochawesome-1
-      #     find cypress/reports -name '*.json' -exec cp {} merged-json/ \;
-      #     ls -lh merged-json
-      #     npx mochawesome-merge merged-json/*.json > merged-json/merged.json
-      #     # ls -lh merged-json
-      #     npx marge merged-json/merged.json -f index -o mochawesome-report
-      #     # npx marge merged-json/merged.json --reportDir ./mochawesome-report --inline
-      #     # ls -lh merged-json
 
       - name: Merge JSONs
         run: |
@@ -82,11 +52,10 @@ jobs:
             cp "$file" "merged-json/report-$i.json"
             i=$((i + 1))
           done
-          ls -lh merged-json
           npx mochawesome-merge merged-json/*.json > merged-json/merged.json
           npx marge merged-json/merged.json -f index -o mochawesome-report
           
-      - name: Deploy to GitHub Pages
+      - name: Deploy results to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
