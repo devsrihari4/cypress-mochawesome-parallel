@@ -44,7 +44,7 @@ jobs:
         with:
           path: cypress/reports
       - name: download
-          run: ls -R
+        run: ls -R
 
       # - name: Merge Allure Results from all machines
       #   run: |
