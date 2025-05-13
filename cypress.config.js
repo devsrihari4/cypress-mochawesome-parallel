@@ -13,6 +13,20 @@ module.exports = defineConfig({
       "json": true
     }
   },
+
+  // reporter: 'cypress-mochawesome-reporter',
+  // reporterOptions: {
+  //   charts: true,
+  //   reportPageTitle: 'custom-title',
+  //   embeddedScreenshots: true,
+  //   inlineAssets: true,
+  //   saveAllAttempts: false,
+  //   reportDir: "cypress/reports",
+  //   overwrite: false,
+  //   html: false,
+  //   json: true
+  // },
+
   e2e: {
     setupNodeEvents(on, config) {
       // require('cypress-mochawesome-reporter/plugin')(on);
